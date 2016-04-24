@@ -1,15 +1,14 @@
-//This is the beginnings of a game engine, using the canvas browser element
-//I have not added physics, as not all games need physics. Not all games need smooth animations, so for those, a simple while loop, waiting for player interaction might suffice
-//The basic components of a game (or the one I intend to make) are - 
+//The basic components of this game engine (or the one I intend to make) are - 
 //  An animation loop - update the canvas according to the object's locations, game settings etc
 //  Logic loop - controls where the enemies are etc
 //  Listen for user interaction - principally to allow users to control the unit object
-//My game will be animated, even at times when the user has finished interacting
 
 var game_settings = {
     canvas:{
         width: 0,
-        height: 0
+        height: 0,
+        max_width: 600,
+        max_height: 600
     },
     units:{
         radius_per_hp: 0,
@@ -388,6 +387,7 @@ function randomise_players(){
 randomise_players()
 
 //Detects arrow keys, updates object's details accordingly
+//Have not implemented player functions.
 function update_position(key_event) {
     if (key_event == 37){
         blue_player.units[0].update_target_pos(-1,0)
@@ -472,8 +472,21 @@ var logic_loop = setInterval(function(){
 }, game_settings.between_loops)
 
 function size_the_board(arrayOfLines){
+    var canvas_width = arrayOfLines[0].length * game_settings.units.spaces_per_move
+    var canvas_height = arrayOfLines.length * game_settings.units.spaces_per_move
+
+//    if (canvas_width <= game_settings.canvas.max_width){
     canvas.width = arrayOfLines[0].length * game_settings.units.spaces_per_move
+//    } else {
+//        canvas.width = game_settings.canvas.max_width
+//    }
+
+//    if (canvas_height <= game_settings.canvas.max_height){
     canvas.height = arrayOfLines.length * game_settings.units.spaces_per_move
+//    } else {
+//        canvas.height = game_settings.canvas.max_height
+//    }
+
 }
 
 function populate_board(board){
@@ -515,5 +528,15 @@ function load_doc(file_name) {
   xhttp.open("GET", file_name, true);
   xhttp.send();
 }
-var map_location = "maps/" + get_query_string() + ".txt"
+var query_string_value = get_query_string()
+var map_location = "maps/" + query_string_value + ".txt"
+document.getElementById("pick_map").value = query_string_value
 load_doc(map_location)
+
+function on_selection_change(){
+    var current_url = window.location.href
+    var url_not_query = current_url.split('?')[0]
+    var map_location = document.getElementById("pick_map").value;
+    var new_url = url_not_query + '?' + map_location;
+    window.location.replace(new_url);
+}

@@ -6,6 +6,21 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    <a href='https://github.com/JasonThomasData/Radius-Death-game-engine' target='_blank'>Github repo</a>
+    <div id='select_area'>
+      <h4>Choose a map: </h4>
+      <select id='pick_map' onchange="on_selection_change()">
+        <option value="one_vs_one">One on one</option>
+        <option value="all_for_themselves">All for themselves</option>
+        <option value="group_advantage">Group advantage</option>
+        <option value="let_others_fight">Let others fight</option>
+        <option value="one_by_one">One by one</option>
+        <option value="obstacles">Obstacles</option>
+        <option value="form_groups">Form groups</option>
+        <option value="simple_map_large_obstacles">Simple map large obstacles</option>
+        <option value="simple_map_large_no_obstacles">Simple map large no obstacles</option>
+      </select>
+    </div>
   	<canvas id="canvas"></canvas>
     <script src="main.js"></script>
     <a href="https://github.com/JasonThomasData/Radius-Death-game-engine.git" target="_blank"></a>
