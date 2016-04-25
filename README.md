@@ -62,3 +62,9 @@ Killing units that are almost dead is an optimal strategy, especially if those u
 - http://www.jason-thomas.xyz/static/projects/radius_death_engine/?packed_in
 - http://www.jason-thomas.xyz/static/projects/radius_death_engine/?simple_map_large_obstacles
 - http://www.jason-thomas.xyz/static/projects/radius_death_engine/?simple_map_large_no_obstacles
+
+####Ideas for games
+
+A strategy game where you control just a few units. Each of those has abilities and power up options. You can build fortifications etc. The game will have a spawn generator and your enemies will just keep coming at you. This would require having pretty complicated maps, so I'd need to be able to cut the screen off (since the screen has to be fitting to the browser).
+
+A survival game with a set number of enemies, who can't see you until you're in range or in sight. It would be a zombie survival game, where you need to find objects, etc. The player would keep objects they find between levels, but the level would end when they get to certain points. Place player in the centre of map always.
