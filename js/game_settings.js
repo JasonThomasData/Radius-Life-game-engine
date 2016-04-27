@@ -20,12 +20,12 @@ var game_settings = {
         width: 0,
         hit_points: 5,
         colour: '#669999'
-    },    
+    },
     animation:{
         lastFrameTimeMs: 0, // The last time the loop was run
         maxFPS: 60 // The maximum FPS we want to allow
     },
-    between_loops: 30, //miliseconds
+    between_loops: 5, //miliseconds
     turn: 0
 }
 game_settings.units.radius_per_hp = (game_settings.units.spaces_per_move - game_settings.units.min_radius * 2) / game_settings.units.hit_points * 0.5

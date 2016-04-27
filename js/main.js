@@ -3,7 +3,6 @@
 //  Logic loop - controls where the enemies are etc
 //  Listen for user interaction - principally to allow users to control the unit object
 
-
 //Initialises canvas
 var canvas = document.getElementById("canvas");
 canvas.width = game_settings.canvas.width //These sizes will be overwritten when the file is uploaded
@@ -25,16 +24,15 @@ function draw(){
         }
     }
     for (var k = 0; k < obstacles_collection.obstacles.length; k++){
-        var half_square = obstacles_collection.obstacles[k].wide / 2
+        var half_missing_square = (game_settings.obstacles.width - obstacles_collection.obstacles[k].wide) / 2
         ctx.beginPath();
-        ctx.rect(obstacles_collection.obstacles[k].current_pos[0], obstacles_collection.obstacles[k].current_pos[1], obstacles_collection.obstacles[k].wide, obstacles_collection.obstacles[k].wide)
+        ctx.rect(obstacles_collection.obstacles[k].current_pos[0] + half_missing_square, obstacles_collection.obstacles[k].current_pos[1] + half_missing_square, obstacles_collection.obstacles[k].wide, obstacles_collection.obstacles[k].wide)
         ctx.fillStyle = game_settings.obstacles.colour
         ctx.fill()
     }
 }
 
 //Some games will have the references to AI etc in this loop. I will have mine seperate.
-
 function draw_loop(timestamp) {
     if (timestamp < game_settings.animation.lastFrameTimeMs + (1000 / game_settings.animation.maxFPS)) {
         requestAnimationFrame(draw_loop);
@@ -69,6 +67,7 @@ function size_the_board(arrayOfLines){
     canvas.height = arrayOfLines.length * game_settings.units.spaces_per_move
 }
 
+//Reads the text passed to it from the file reader, places units and obstacles
 function populate_board(board){
     var arrayOfLines = board.match(/[^\r\n]+/g);
     for (var i = 0; i < arrayOfLines.length; i++){
