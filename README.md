@@ -1,8 +1,8 @@
-###Radius Death - a JavaScript game engine.
+###Radius Life - a JavaScript game engine.
 
 ![Screenshot](screenshot.png)
 
-This is a JavaScript game engine I've called Radius Death. It's 100% vanilla JavaScript.
+This is a JavaScript game engine I've called Radius Life. It's 100% vanilla JavaScript.
 
 The engine allows for a hybrid system where players' units move in turn, but the game is ongoing, so it's like a slowed-down RTS game, or a turn based game that doesn't wait for the player to think.
 
@@ -38,34 +38,35 @@ These are a few principles that are common to all real time strategy and turn ba
 
 For two equally-matched units, the unit that moves last before fighting has a disadvantage. When the fighting starts, the opponent who was there first will be able to attack first. This is the same in real time fighting as resting and preparing before engagement, and is usually the defender's advantage.
 
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?one_vs_one
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?one_vs_one
 
 Two equal units (with the same environmental constants) that face only each other will have completely predictable results. But, when there're more units, the results of a game become less predictable. This is especially the case with this game engine since units target enemies of a similar distance away randomly.
 
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?one_vs_all
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?all_for_themselves
 
 Units of the same colour will naturally form groups (and survive longer by doing so). 
 
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?form_groups
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?form_groups
 
-A force can defeat a significantly larger one if opposing units can be isolated and attacked one at a time.
+A force can defeat a significantly larger one if opposing units can be isolated and attacked one at a time. This used to work, but now bots are moving towards enemy more efficiently. Need a way to force bots not to move.
 
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?one_by_one
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?one_by_one
 
 It is almost always better to allow your opponents to fight each other, rather than have to fight them, assuming their is no benefit for attacking enemies. Survival is often best achieved by being away from the battle (this game engine does not support resources, which would dramatically change things).
 
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?let_others_fight
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?let_others_fight
 
 Units boardering areas with no enemies will, on average, be less open to attacks. They will also be less effective at holding important areas (again, no resources available yet).
 
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?group_advantage
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?spiral
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?group_advantage
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?spiral
 
 Killing units that are almost dead is an optimal strategy, especially if those units don't suffer a disadvantage for being hurt. The fewer enemy units that can hurt your units, the better.
 
 ####Some other examples 
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?chess_board
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?obstacles
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?packed_in
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?simple_map_large_obstacles
-- http://www.jason-thomas.xyz/static/projects/radius_death_engine/?simple_map_large_no_obstacles
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?chess_board
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?obstacles
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?packed_in_medium
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?packed_in_large
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?simple_map_large_obstacles
+- http://www.jason-thomas.xyz/static/projects/Radius-Life-game-engine/?simple_map_large_no_obstacles

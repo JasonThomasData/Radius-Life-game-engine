@@ -5,6 +5,10 @@ var game_settings = {
         max_width: 600,
         max_height: 600
     },
+    human_player:{
+        display_x: 0, //In relation to the canvas
+        display_y: 0,
+    },
     units:{
         radius_per_hp: 0,
         spaces_per_move: 25, //Needs to be at least double the min_radius just to show up

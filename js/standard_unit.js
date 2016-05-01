@@ -13,10 +13,10 @@ function unit(colour, coords) {
     this.speed = game_settings.units.speed, //the number of pixels this object moves per game loop
     this.spaces_per_move = game_settings.units.spaces_per_move, //the distance this object moves per user interaction, etc
     this.moves_this_turn = this.spaces_per_move,
-    this.hits_this_turn = 0,
+    this.hits_this_turn = 0, //number of times this unit has hit an enemy. If it's equal to the maximum set in game settings, then turn is over
     this.turn_going = true,
-    this.current_action = null,
     this.attacking_enemy = null,
+    this.current_action = null, //Can be attack or move
     this.current_pos = this.get_init_coords(coords), //[x,y]
     this.target_pos = this.get_init_coords(coords), //[x,y]
     this.hit_points = game_settings.units.hit_points,
@@ -48,7 +48,17 @@ function unit(colour, coords) {
         }
         return [vacant_space, obstacle]
     },
-    this.update_target_pos = function(closest_enemy, x, y){
+    this.update_target_pos_if_vacant = function(potential_target_pos){
+        var results = this.check_square_vacancy(potential_target_pos) 
+        var vacant = results[0]
+        var obstacle = results[1]
+        if (vacant == true){
+            this.target_pos = potential_target_pos;
+        } else if (obstacle != null){
+            this.attack_obstacle(obstacle)
+        }
+    },
+    this.get_new_target_pos = function(closest_enemy, x, y){
         function set_potential_target(get_target_pos){
             var init_x = get_target_pos[0]
             var init_y = get_target_pos[1]
@@ -57,55 +67,55 @@ function unit(colour, coords) {
         var x_dif = this.current_pos[0] - closest_enemy.current_pos[0]
         var y_dif = this.current_pos[1] - closest_enemy.current_pos[1]
         var potential_target_pos = set_potential_target(this.target_pos)
-        var vacant = false
-        var results = []
         if(Math.abs(x_dif) > Math.abs(y_dif)){
-            //Put the below stuff inside the check_square_vacancy function - maybe?
-            //Also, why is the order to attack coming from the update pos function? Move it to take_turn
+            //Closest enemy is horizontal
             if(x_dif > 0){
+                //Closest enemy is right
                 potential_target_pos[0] = this.target_pos[0] - this.spaces_per_move;
-                results = this.check_square_vacancy(potential_target_pos) 
-                vacant = results[0]
-                obstacle = results[1]
-                if (vacant == true){
-                    this.target_pos = potential_target_pos;
-                } else if (obstacle != null){
-                    this.attack_obstacle(obstacle)
-                }
             } else {
+                //Closest enemy is right                
                 potential_target_pos[0] = this.target_pos[0] + this.spaces_per_move;
-                results = this.check_square_vacancy(potential_target_pos);
-                vacant = results[0]
-                obstacle = results[1]
-                if (vacant == true){
-                    this.target_pos = potential_target_pos 
-                } else if (obstacle != null){
-                    this.attack_obstacle(obstacle)
-                }
+            }
+        } else if(Math.abs(x_dif) < Math.abs(y_dif)){
+            //Closest enemy is vertical
+            if(y_dif > 0){
+                //Closest enemy is above
+                potential_target_pos[1] = this.target_pos[1] - this.spaces_per_move;
+            } else {
+                //Closest enemy is below
+                potential_target_pos[1] = this.target_pos[1] + this.spaces_per_move;
             }
         } else {
-            if(y_dif > 0){
-                potential_target_pos[1] = this.target_pos[1] - this.spaces_per_move;
-                results = this.check_square_vacancy(potential_target_pos);
-                vacant = results[0]
-                obstacle = results[1]
-                if (vacant == true){
-                    this.target_pos = potential_target_pos 
-                } else if (obstacle != null){
-                    this.attack_obstacle(obstacle)
+            //Then, Math.abs(x_dif) == Math.abs(y_dif) - this means the enemy is diagonal
+            var random_i = Math.floor(Math.random()* 2)
+            console.log(random_i)
+            if(y_dif > 0 && x_dif > 0){
+                //Emeny is bottom right
+                potential_target_pos[random_i] = this.target_pos[random_i] - this.spaces_per_move;
+            } else if (y_dif < 0 && x_dif < 0){
+               //Emeny is top left
+                potential_target_pos[random_i] = this.target_pos[random_i] + this.spaces_per_move;
+            } else if (y_dif < 0 && x_dif > 0){
+               //Emeny is top right
+                if (random_i == 0){
+                    //Move up
+                    potential_target_pos[random_i] = this.target_pos[random_i] - this.spaces_per_move;
+                } else {
+                    //Move right
+                    potential_target_pos[random_i] = this.target_pos[random_i] + this.spaces_per_move;
                 }
             } else {
-                potential_target_pos[1] = this.target_pos[1] + this.spaces_per_move;
-                results = this.check_square_vacancy(potential_target_pos);
-                vacant = results[0]
-                obstacle = results[1]
-                if (vacant == true){
-                    this.target_pos = potential_target_pos 
-                } else if (obstacle != null){
-                    this.attack_obstacle(obstacle)
+               //Emeny is bottom left
+                if (random_i == 0){
+                    //Move down
+                    potential_target_pos[random_i] = this.target_pos[random_i] + this.spaces_per_move;
+                } else {
+                    //Move left
+                    potential_target_pos[random_i] = this.target_pos[random_i] - this.spaces_per_move;
                 }
             }
         }
+        this.update_target_pos_if_vacant(potential_target_pos)
     },
     this.move = function(){ //Only handles the animations between moves. When the unit reaches its target, it acquires a new target
         if (this.target_pos[0] > this.current_pos[0]){
@@ -135,22 +145,28 @@ function unit(colour, coords) {
     this.take_turn = function(){
         //This is the condtion that checks if you are next to an enemy, if so, starts attaccking. Otherwise, it finds the nearest enemy and begins moving toward it
         if (this.current_action != 'move') {
-            //Add an attacking_enemy property to this object. If it's blank, get a new one. If it's taken, continue attacking.
-            this.attacking_enemy = this.find_closest_enemy()
-            if (this.attacking_enemy == null){
-                clearInterval(logic_loop)
-                this.turn_going = false
-                return
-            } else if (this.check_if_enemy_next_space(this.attacking_enemy) == true){
+            if (this.closest_enemy == null){
+                this.closest_enemy = this.find_closest_enemy()
+                if(this.closest_enemy == null){
+                    clearInterval(logic_loop)
+                    this.turn_going = false
+                    return
+                }
+            }
+            if (this.check_if_enemy_next_space(this.closest_enemy) == true){
                 this.hits_this_turn ++
                 this.current_action = 'attack'
-                this.attack_enemy(this.attacking_enemy)
+                this.attack_enemy(this.closest_enemy)
                 if (this.hits_this_turn == game_settings.units.hits_per_turn){
+                    this.closest_enemy = null
                     this.current_action = null
                     this.turn_going = false
                     this.hits_this_turn = 0
                     return
                 }
+                return
+            } else {
+                //this.closest_enemy = this.find_closest_enemy()
             }
         }
         if (this.current_action != 'attack'){
@@ -159,11 +175,11 @@ function unit(colour, coords) {
                 this.moves_this_turn ++
                 this.move()
             } else {
-                var closest_enemy = this.find_closest_enemy()
-                if (closest_enemy == null){
+                if (this.closest_enemy == null){
                     this.turn_going = false
                 }
-                this.update_target_pos(closest_enemy,0,0)
+                this.closest_enemy = this.find_closest_enemy()
+                this.get_new_target_pos(this.closest_enemy,0,0)
                 this.current_action = null
                 this.turn_going = false
                 this.moves_this_turn  = 0
