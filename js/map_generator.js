@@ -9,17 +9,17 @@ function populate_board(board){
     for (var i = 0; i < array_of_lines.length; i++){
         for (var j = 0; j < array_of_lines[i].length; j++){
             if (array_of_lines[i][j] == 'b'){
-                blue_player.create_new_unit([j,i])
+                player_create_new_unit(blue_player, [j,i]) 
             } else if (array_of_lines[i][j] == 'r'){
-                red_player.create_new_unit([j,i])
+                player_create_new_unit(red_player, [j,i]) 
             } else if (array_of_lines[i][j] == 'g'){
-                green_player.create_new_unit([j,i])                
+                player_create_new_unit(green_player, [j,i])               
             } else if (array_of_lines[i][j] == 'y'){
-                yellow_player.create_new_unit([j,i])
+                player_create_new_unit(yellow_player, [j,i])
             } else if (array_of_lines[i][j] == 'h'){
-                human_player.create_new_unit([j,i])
+                player_create_new_unit(human_player, [j,i])
             } else if (array_of_lines[i][j] == 'z'){
-                zombie_player.create_new_unit([j,i])
+                player_create_new_unit(zombie_player, [j,i])
             } else if (array_of_lines[i][j] == 'o'){
                 obstacles_collection.create_new_obstacle([j,i])
             }            

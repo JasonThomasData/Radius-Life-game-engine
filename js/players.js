@@ -1,14 +1,19 @@
 var players = []
 
-function player_object(colour){
+function player_object(colour, unit_type){
     this.colour = colour,
     this.units = [],
     this.actions = 0,
+    this.unit_type = unit_type,
     this.init = function(){
         players.push(this)
     },
     this.create_new_unit = function(coords){
-        var new_unit = new unit(colour, coords);
+        if(this.unit_type == 'standard'){
+            var new_unit = new unit(colour, coords);            
+        } else if (this.unit_type == 'player'){
+            var new_unit = new human_unit(colour, coords);
+        }
         this.units.push(new_unit)
     },
     this.units_move = function(){
@@ -62,9 +67,12 @@ function randomise_players(){
     }
     players = temp_players    
 }
-randomise_players()
 
-var green_player = new player_object('#00cc00')
-var yellow_player = new player_object('#ffcc00')
-var blue_player = new player_object('#0066cc')
-var red_player = new player_object('#e62e00')
+var green_player = new player_object('#00cc00', 'standard')
+var yellow_player = new player_object('#ffcc00', 'standard')
+var blue_player = new player_object('#0066cc', 'standard')
+var red_player = new player_object('#e62e00', 'standard')
+
+var zombie_player = new player_object('#669900', 'standard')
+
+randomise_players()

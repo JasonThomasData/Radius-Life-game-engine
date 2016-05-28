@@ -1,3 +1,6 @@
+//These are the actions that the unit (not human) units use.
+//I've placed these in a file separate from the objects, this way each object has less memory.
+
 function unit_update_radius(this_unit){
     this_unit.radius = game_settings.units.radius_per_hp * this_unit.hit_points
 }
@@ -6,12 +9,12 @@ function unit_check_square_vacancy(potential_target_pos){
     var vacant_space = true
     var obstacle = null
     //Any units here?
-    for (var i = 0; i < players.length; i++){
-        for (var j = 0; j < players[i].units.length; j++){
-            if(players[i].units[j].target_pos[0] == potential_target_pos[0] && players[i].units[j].target_pos[1] == potential_target_pos[1]){
+    for (var i = 0; i < players_all.length; i++){
+        for (var j = 0; j < players_all[i].units.length; j++){
+            if(players_all[i].units[j].target_pos[0] == potential_target_pos[0] && players_all[i].units[j].target_pos[1] == potential_target_pos[1]){
                 vacant_space = false
             } else 
-            if(players[i].units[j].current_pos[0] == potential_target_pos[0] && players[i].units[j].current_pos[1] == potential_target_pos[1]){
+            if(players_all[i].units[j].current_pos[0] == potential_target_pos[0] && players_all[i].units[j].current_pos[1] == potential_target_pos[1]){
                 vacant_space = false
             }
         }
@@ -214,11 +217,11 @@ function unit_find_closest_enemy(this_unit){
     var closest_enemies = []
     closest_enemies.push(null)
     var shortest_long_side = 0
-    for (var i = 0; i < players.length; i++){
+    for (var i = 0; i < players_all.length; i++){
         //Don't include units of the same colour
-        if (players[i].colour != this_unit.colour && players[i].units.length > 0){
-            for (var j = 0; j < players[i].units.length; j++){
-                var results = unit_check_closest_enemy(this_unit, players[i].units[j], closest_enemies, shortest_long_side)
+        if (players_all[i].colour != this_unit.colour && players_all[i].units.length > 0){
+            for (var j = 0; j < players_all[i].units.length; j++){
+                var results = unit_check_closest_enemy(this_unit, players_all[i].units[j], closest_enemies, shortest_long_side)
                 closest_enemies = results[0]
                 shortest_long_side = results[1]                    
             }
