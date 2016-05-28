@@ -1,8 +1,3 @@
-//The basic components of this game engine (or the one I intend to make) are - 
-//  An animation loop - update the canvas according to the object's locations, game settings etc
-//  Logic loop - controls where the enemies are etc
-//  Listen for user interaction - principally to allow users to control the unit object
-
 //Initialises canvas
 var canvas = document.getElementById("canvas");
 canvas.width = game_settings.canvas.width //These sizes will be overwritten when the file is uploaded
@@ -60,65 +55,27 @@ var logic_loop = setInterval(function(){
     }
 }, game_settings.between_loops)
 
-function size_the_board(arrayOfLines){
-    var canvas_width = arrayOfLines[0].length * game_settings.units.spaces_per_move
-    var canvas_height = arrayOfLines.length * game_settings.units.spaces_per_move
-    canvas.width = arrayOfLines[0].length * game_settings.units.spaces_per_move
-    canvas.height = arrayOfLines.length * game_settings.units.spaces_per_move
-}
+//Below, everythin that manages players
 
-//Reads the text passed to it from the file reader, places units and obstacles
-function populate_board(board){
-    var arrayOfLines = board.match(/[^\r\n]+/g);
-    for (var i = 0; i < arrayOfLines.length; i++){
-        for (var j = 0; j < arrayOfLines[i].length; j++){
-            if (arrayOfLines[i][j] == 'b'){
-                blue_player.create_new_unit([j,i])
-            } else if (arrayOfLines[i][j] == 'r'){
-                red_player.create_new_unit([j,i])
-            } else if (arrayOfLines[i][j] == 'g'){
-                green_player.create_new_unit([j,i])                
-            } else if (arrayOfLines[i][j] == 'y'){
-                yellow_player.create_new_unit([j,i])
-            } else if (arrayOfLines[i][j] == 'o'){
-                obstacles_collection.create_new_obstacle([j,i])
-            }
-        }
+var players = []
+
+function randomise_players(){
+    var temp_players = []
+    while (players.length > 0){
+        var i = Math.floor(Math.random() * (players.length))
+        temp_players.push(players[i])
+        players.splice(i, 1)
     }
-    size_the_board(arrayOfLines)
+    players = temp_players    
 }
 
-//The stuff below manages the query strings, which I will use to save board states
-//I could also give people seed codes to spawn new maps, but this seams easier
-//To simplify everything, players should receive a code on completion of levels
-function get_query_string() {
-    var url = window.location.href;
-    var query = url.split('?')
-    return query[1]
-}
+//TODO - place this inside the map generator. If a g is detected, generator green_player
 
-function load_doc(file_name) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-        var result = xhttp.responseText
-        console.log('Loading map')
-        console.log(result)
-        populate_board(result)
-    }
-  };
-  xhttp.open("GET", file_name, true);
-  xhttp.send();
-}
-var query_string_value = get_query_string()
-var map_location = "maps/" + query_string_value + ".txt"
-document.getElementById("pick_map").value = query_string_value
-load_doc(map_location)
+var green_player = new player_object('#00cc00', 'standard')
+var yellow_player = new player_object('#ffcc00', 'standard')
+var blue_player = new player_object('#0066cc', 'standard')
+var red_player = new player_object('#e62e00', 'standard')
+var human_player = new player_object('#336699', 'player')
+var zombie_player = new player_object('#669900', 'standard')
 
-function on_selection_change(){
-    var current_url = window.location.href
-    var url_not_query = current_url.split('?')[0]
-    var map_location = document.getElementById("pick_map").value;
-    var new_url = url_not_query + '?' + map_location;
-    window.location.replace(new_url);
-}
+randomise_players()
