@@ -1,19 +1,36 @@
 function player_create_new_unit(player, coords){
-    if(player.unit_type == 'standard'){
+    if(player.player_type == 'standard'){
         var new_unit = new unit(player.colour, coords);            
-    } else if (player.unit_type == 'player'){
-        var new_unit = new human_unit(player.colour, coords);
+    } else if (player.player_type == 'player'){
+        var new_unit = new unit(player.colour, coords);
     }
     player.units.push(new_unit)
 }
 
-function player_units_move(player){
+function player_human_units_move(player){
+    for (var i = 0; i < player.units.length; i++){
+        if (player.units[i].turn_going == true){
+            unit_human_take_turn(player.units[i])
+        }
+    }
+    player_check_moves(player)
+}
+
+function player_standard_units_move(player){
     for (var i = 0; i < player.units.length; i++){
         if (player.units[i].turn_going == true){
             unit_take_turn(player.units[i])
         }
     }
     player_check_moves(player)
+}
+
+function player_all_units_move(player){
+    if(player.player_type == 'standard'){
+        player_standard_units_move(player)
+    } else {
+        player_human_units_move(player)
+    }
 }
 
 function player_remove_dead(player){

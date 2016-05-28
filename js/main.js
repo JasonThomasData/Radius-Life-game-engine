@@ -5,7 +5,7 @@ var logic_loop = setInterval(function(){
     obstacles_collection.remove_destroyed()
     player_remove_dead(players_all[i])
     if (players_all[i].units.length > 0){
-        player_units_move(players_all[i])
+        player_all_units_move(players_all[i])
     } else {
         game_settings.turn ++
         if (i >= players_all.length - 1){
